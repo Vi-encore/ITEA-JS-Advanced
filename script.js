@@ -322,6 +322,7 @@ goodsSearch.addEventListener("input", (event) => {
   });
 });
 
+
 //сортування за радіобатонами
 
 let goodsSort = document.querySelectorAll(".js-goods-sort");
