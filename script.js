@@ -1,0 +1,362 @@
+//     Продукт з прикладу
+//     {
+//         "id": 333692440,
+//         "href": "https://rozetka.com.ua/ua/persil-9000101536591/p333692440/",
+//         "title": "Капсули для прання Persil Power Caps Колір Doy 70 шт. (9000101536591)",
+//         "images": [
+//             {
+//                 "preview": "https://content2.rozetka.com.ua/goods/images/preview/250024064.jpg"
+//             }
+//         ],
+//         "price": {
+//             "old": 1096,
+//             "current": 549,
+//         },
+//         "badge": "new"
+//     }
+
+//  1. Створити функцію, яка виведе всі товари з масиву goods в .product-list з дотриманням відповідної верстки ++++
+//  2. Реалізувати фільтрацію товарів при зміні select (.js-goods-filter).
+//     Вивести відфільтрованний список замість поточного. Використайте type event - change +++++??
+//  3. Реалувати пошук товарів через інпут .js-goods-search.
+//     Вивести список знайденних товарів замість поточного.  Використайте type event - input ++++,
+//  4. Реалувати сортування товарів через інпути .js-goods-sort.
+//     Вивести відсортований список замість поточного.  Використайте type event - change
+
+// * ВАЖЛИВО! Всі обчислення починати від масива goods. Не потрібно реалізовувати наприклад сортування відфільтрованного списку і т.п.
+
+let goods = [
+  {
+    id: 14606570,
+    href: "https://hard.rozetka.com.ua/ua/kingston_sa400s37_240g/p14606570/",
+    title: 'Kingston SSDNow A400 240GB 2.5" SATAIII 3D TLC (SA400S37/240G)',
+    images: [
+      {
+        preview:
+          "https://content.rozetka.com.ua/goods/images/preview/10957834.jpg",
+      },
+    ],
+    price: {
+      old: 806,
+      current: 549,
+    },
+    badge: "new",
+  },
+  {
+    id: 280807508,
+    href: "https://rozetka.com.ua/ua/persil_9000101428230/p280807508/",
+    title: "Пральний порошок Persil автомат Колор 8.1 кг (9000101428230)",
+    images: [
+      {
+        preview:
+          "https://content1.rozetka.com.ua/goods/images/preview/242978958.jpg",
+      },
+    ],
+    price: {
+      old: 896,
+      current: 509,
+    },
+    badge: "sale",
+  },
+  {
+    id: 258053376,
+    href: "https://rozetka.com.ua/ua/jacobs_8714599108932/p258053376/",
+    title: "Кава розчинна Jacobs Monarch 500 г (8714599108932)",
+    images: [
+      {
+        preview:
+          "https://content1.rozetka.com.ua/goods/images/preview/151054150.jpg",
+      },
+    ],
+    price: {
+      old: 496,
+      current: 249,
+    },
+    badge: "sale",
+  },
+  {
+    id: 14606558,
+    href: "https://hard.rozetka.com.ua/ua/kingston_sa400s37_480g/p14606558/",
+    title: 'Kingston SSDNow A400 480GB 2.5" SATAIII 3D V-NAND (SA400S37/480G)',
+    images: [
+      {
+        preview:
+          "https://content1.rozetka.com.ua/goods/images/preview/172239507.jpg",
+      },
+    ],
+    price: {
+      old: 1296,
+      current: 559,
+    },
+    badge: "new",
+  },
+  {
+    id: 114194984,
+    href: "https://rozetka.com.ua/ua/finish_5997321736280/p114194984/",
+    title:
+      "Таблетки для посудомийних машин FINISH All in 1 Max 94 шт. (5997321736280)",
+    images: [
+      {
+        preview:
+          "https://content1.rozetka.com.ua/goods/images/preview/191113870.jpg",
+      },
+    ],
+    price: {
+      old: 696,
+      current: 349,
+    },
+    badge: "new",
+  },
+  {
+    id: 224265469,
+    href: "https://rozetka.com.ua/ua/catsan_4008429130403/p224265469/",
+    title:
+      "Наповнювач для котячого туалету Catsan Hygiene plus Мінеральний вбирний 4.9 кг (10 л) (4008429130403)",
+    images: [
+      {
+        preview:
+          "https://content.rozetka.com.ua/goods/images/preview/26038622.jpg",
+      },
+    ],
+    price: {
+      old: 1696,
+      current: 1249,
+    },
+    badge: "sale",
+  },
+  {
+    id: 5873133,
+    href: "https://rozetka.com.ua/ua/frosch_4009175191908/p5873133/",
+    title:
+      "Таблетки для миття посуду в посудомийних машинах Frosch Сода 30 шт (4009175191908)",
+    images: [
+      {
+        preview:
+          "https://content.rozetka.com.ua/goods/images/preview/10693594.jpg",
+      },
+    ],
+    price: {
+      old: 1495,
+      current: 1289,
+    },
+    badge: "new",
+  },
+  {
+    id: 4918269,
+    href: "https://rozetka.com.ua/ua/bells_5000387905474_5000387905634/p4918269/",
+    title: "Віскі Bell's Original 0.7 л 40% (5000387905474_5000387905634)",
+    images: [
+      {
+        preview:
+          "https://content1.rozetka.com.ua/goods/images/preview/48122198.jpg",
+      },
+    ],
+    price: {
+      old: 498,
+      current: 299,
+    },
+    badge: "sale",
+  },
+  {
+    id: 23488125,
+    href: "https://rozetka.com.ua/ua/ambassador_7612654000034/p23488125/",
+    title: "Кава в зернах Ambassador Blue Label 1 кг (7612654000034)",
+    images: [
+      {
+        preview:
+          "https://content2.rozetka.com.ua/goods/images/preview/11251220.jpg",
+      },
+    ],
+    price: {
+      old: 633,
+      current: 359,
+    },
+    badge: "sale",
+  },
+  {
+    id: 24852941,
+    href: "https://bt.rozetka.com.ua/ua/philips_mg5730_15/p24852941/",
+    title: "Тример універсальний PHILIPS Series 5000 MG5730/15",
+    images: [
+      {
+        preview:
+          "https://content.rozetka.com.ua/goods/images/preview/11314684.jpg",
+      },
+    ],
+    price: {
+      old: 2599,
+      current: 1999,
+    },
+    badge: "new",
+  },
+];
+
+function createTile(element) {
+  let productList = document.querySelector(".product-list");
+
+  let newArticle = document.createElement("article");
+  newArticle.classList.add("product-list__item", "tile");
+  newArticle.setAttribute("data-id", element.id);
+  let newA = document.createElement("a");
+  newA.setAttribute("href", element.href);
+  newA.classList.add("tile__link");
+  let spanBadge = document.createElement("span");
+  spanBadge.classList.add("tile__badge", `tile__badge--${element.badge}`);
+  spanBadge.innerHTML = `${element.badge}`;
+  let tileImg = document.createElement("span");
+  tileImg.classList.add("tile__image");
+  let img = document.createElement("img");
+  img.setAttribute("src", `${element.images[0].preview}`);
+  img.setAttribute("alt", `${element.title}`);
+  let tileTitle = document.createElement("span");
+  tileTitle.classList.add("tile__title");
+  tileTitle.innerHTML = `${element.title}`;
+  let tileInfo = document.createElement("span");
+  tileInfo.classList.add("tile__info");
+  let tilePrice = document.createElement("span");
+  tilePrice.classList.add("tile__price");
+  let tileOldPrice = document.createElement("span");
+  tileOldPrice.classList.add("tile__old-price");
+  tileOldPrice.innerHTML = `${element.price.old} ₴`;
+  let tileNewPrice = document.createElement("span");
+  tileNewPrice.classList.add("tile__new-price");
+  tileNewPrice.innerHTML = ` ${element.price.current} ₴`;
+  let btn = document.createElement("button");
+  btn.classList.add("btn");
+  btn.innerText = "Купити";
+  productList.appendChild(newArticle);
+  newArticle.appendChild(newA);
+  newA.appendChild(spanBadge);
+  newA.appendChild(tileImg);
+  newA.appendChild(tileTitle);
+  newA.appendChild(tileInfo);
+  tileImg.appendChild(img);
+  tileInfo.appendChild(tilePrice);
+  tileInfo.appendChild(btn);
+  tilePrice.appendChild(tileOldPrice);
+  tilePrice.appendChild(tileNewPrice);
+  newA.insertBefore(tileTitle, tileInfo);
+  newA.insertBefore(tileImg, tileTitle);
+  newA.insertBefore(spanBadge, tileImg);
+  tileInfo.insertBefore(tilePrice, btn);
+  tilePrice.insertBefore(tileOldPrice, tileNewPrice);
+}
+
+goods.forEach((element) => {
+  createTile(element);
+});
+
+//фільтр за параметрами
+
+let goodsFilter = document.querySelector(".js-goods-filter");
+goodsFilter.addEventListener("change", (event) => {
+  //скидання пошуку і сортування, якщо проводиться фільтрація
+  let sort = document.querySelectorAll(".js-goods-sort");
+  sort.forEach((element) => {
+    element.checked = false;
+  });
+
+  let search = document.querySelector(".js-goods-search");
+  search.value = "";
+  //завершення скидання
+
+  event.preventDefault();
+  let checker = event.target.value;
+
+  let productList = document.querySelector(".product-list");
+  productList.innerHTML = "";
+
+  switch (checker) {
+    case "new":
+      goods.forEach((element) => {
+        element.badge === "new" && createTile(element);
+      });
+      break;
+    case "sale":
+      goods.forEach((element) => {
+        element.badge === "sale" && createTile(element);
+      });
+      break;
+    case "low-price":
+      goods.forEach((element) => {
+        element.price.current < 1000 && createTile(element);
+      });
+      break;
+    case "high-price":
+      goods.forEach((element) => {
+        element.price.current > 1000 && createTile(element);
+      });
+      break;
+
+    default:
+      goods.forEach((element) => {
+        createTile(element);
+      });
+      break;
+  }
+});
+
+//пошук
+
+let goodsSearch = document.querySelector(".js-goods-search");
+goodsSearch.addEventListener("input", (event) => {
+  event.preventDefault();
+
+  let searchValue = event.target.value;
+  //скидання пошуку і сортування, якщо проводиться фільтрація
+  let sort = document.querySelectorAll(".js-goods-sort");
+  sort.forEach((element) => {
+    element.checked = false;
+  });
+
+  let filter = document.querySelector(".js-goods-filter");
+  filter.value = "all";
+  //завершення скидання
+
+  let productList = document.querySelector(".product-list");
+  productList.innerHTML = "";
+
+  goods.forEach((element) => {
+    element.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+      createTile(element);
+  });
+});
+
+//сортування за радіобатонами
+
+let goodsSort = document.querySelectorAll(".js-goods-sort");
+goodsSort.forEach((element) => {
+  element.addEventListener("change", (event) => {
+    event.preventDefault();
+    let targetValue = event.target.value;
+    let sortArr = [...goods];
+
+    //скидання пошуку і сортування, якщо проводиться фільтрація
+    let filter = document.querySelector(".js-goods-filter");
+    filter.value = "all";
+
+    let search = document.querySelector(".js-goods-search");
+    search.value = "";
+    //завершення скидання
+
+    let productList = document.querySelector(".product-list");
+    productList.innerHTML = "";
+
+    switch (targetValue) {
+      case "price":
+        sortArr.sort((a, b) => (a.price.current > b.price.current ? 1 : -1));
+        break;
+      case "alphabet":
+        sortArr.sort((a, b) => (a.title > b.title ? 1 : -1));
+        break;
+    }
+
+    sortArr.forEach((element) => {
+      createTile(element);
+    });
+  });
+});
+
+// goodsSort.addEventListener("change", (event) => {
+//   console.log(event);
+// });

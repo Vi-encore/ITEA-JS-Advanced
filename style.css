@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    max-width: 1000px;
+    padding: 0 10px;
+    margin: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    box-shadow: 4px 2px 12px rgba(0, 0, 0, 0.8);
+    background: white;
+    z-index: 1;
+}
+
+.header__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__logo {
+    display: flex;
+    width: 100px;
+}
+
+.header__logo img {
+    width: 100%;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;    
+    list-style: none;
+}
+
+.nav__item a {
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px;
+    font-family: sans-serif;
+}
+
+.nav__item a:hover {
+    text-decoration: underline;
+}
+
+.info__item {
+    position: relative;
+}
+
+.info__count {
+    position: absolute;
+    top: 2px;
+    color: navy;
+    height: 100%;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+.info {
+    display: flex;
+    gap: 10px;
+}
+
+.goods__title {
+    font-family: sans-serif;
+    color: navy;
+}
+
+.goods__sort {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    color: navy;
+}
+
+.goods__sort > p {
+    font-weight: 600;
+}
+
+.goods__sort > div {
+    display: flex;
+    align-items: center;
+}
+
+.goods__sidebar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+input[type=search], select {
+    display: block;
+    padding: 10px 20px;
+    border: 2px solid navy;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tile {
+    position: relative;
+    width: calc(25% - 8px * 3 / 4);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: .3s;
+}
+.tile:hover {
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.tile__link {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: navy;
+    font-family: sans-serif;
+}
+
+.tile__top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.tile__badge {
+    background: navy;
+    padding: 5px 10px;
+    color: white;
+    font-size: 12px;
+}
+
+.tile__badge--new {
+    background: navy;
+}
+
+.tile__badge--sale {
+    background: red;
+}
+
+.tile__image {
+    display: flex;
+    width: 100%;
+    height: 150px;
+    padding: 20px 0;
+}
+
+.tile__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.tile__title {
+    display: block;
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+.tile__old-price {
+    color: grey;
+    text-decoration: line-through;
+    font-size: 12px;
+}
+
+.tile__new-price {
+    color: red;
+}
+
+.tile__info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 10px 20px;
+    background: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.btn:hover {
+    background: #58a158;
+}
+
+.notification {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    background: rgb(184 184 218 / 94%);
+    font-family: sans-serif;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.notification--active {
+    top: 20%;    
+}
+
+.notification__close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    height: 30px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.notification__close:hover {
+    transform: rotate(90deg);
+}
+
+.notification__close span {
+    width: 10px;
+    height: 1px;
+    background: #000;
+    position: absolute;
+}
+
+.notification__close span:first-child {
+    transform: rotate(45deg);
+}
+
+.notification__close span:last-child {
+    transform: rotate(135deg);
+}
