@@ -1,54 +1,54 @@
-const popupCart = document.querySelector('.js-popup-cart');
-const popupOrder = document.querySelector('.js-popup-order');
-const showOrderBtn = document.querySelector('.js-show-order');
-const popupCartList = document.querySelector('.js-popup-cart-list');
-const headerCount = document.querySelector('.js-header-count');
-const filterSelect = document.querySelector('.js-goods-filter');
-const sortInputs = document.querySelectorAll('.js-goods-sort');
-const notification = document.querySelector('.js-notification');
-const notificationText = document.querySelector('.js-notification-content');
+const popupCart = document.querySelector(".js-popup-cart");
+const popupOrder = document.querySelector(".js-popup-order");
+const showOrderBtn = document.querySelector(".js-show-order");
+const popupCartList = document.querySelector(".js-popup-cart-list");
+const headerCount = document.querySelector(".js-header-count");
+const filterSelect = document.querySelector(".js-goods-filter");
+const sortInputs = document.querySelectorAll(".js-goods-sort");
+const notification = document.querySelector(".js-notification");
+const notificationText = document.querySelector(".js-notification-content");
 const ids = getAddedProducts();
+const banner = document.querySelector(".js-sale-banner");
 
 setCount(ids.length);
-getSearchParams('filter')
-showOrderBtn.addEventListener('click', () => {
-    hidePopup(popupCart);
-    showPopup(popupOrder);
-})
-
+getSearchParams("filter");
+showOrderBtn.addEventListener("click", () => {
+  hidePopup(popupCart);
+  showPopup(popupOrder);
+});
 
 async function getGoods() {
-    let url = 'https://my-json-server.typicode.com/OlhaKlymas/json-lesson/goods';
-    let response = await fetch(url);
-    return response.json();
+  let url = "https://my-json-server.typicode.com/OlhaKlymas/json-lesson/goods";
+  let response = await fetch(url);
+  return response.json();
 }
 
-function showProducts(goods, filterBy){
-    let productList = document.querySelector('.product-list');
-    productList.innerHTML = '';
+function showProducts(goods, filterBy) {
+  let productList = document.querySelector(".product-list");
+  productList.innerHTML = "";
 
-    switch(filterBy) {
-        case 'all': 
-            goods = [...goods];
-            break;
-        case 'new':
-        case 'sale':
-            goods = goods.filter(item => item.badge === filterBy);
-            break;
-        case 'low-price':
-            goods = goods.filter(item => item.price.current <= 1000);
-            break;
-        case 'high-price':
-            goods = goods.filter(item => item.price.current > 1000);
-            break;
-    }
+  switch (filterBy) {
+    case "all":
+      goods = [...goods];
+      break;
+    case "new":
+    case "sale":
+      goods = goods.filter((item) => item.badge === filterBy);
+      break;
+    case "low-price":
+      goods = goods.filter((item) => item.price.current <= 1000);
+      break;
+    case "high-price":
+      goods = goods.filter((item) => item.price.current > 1000);
+      break;
+  }
 
-    goods.forEach(item => {
-        const article = document.createElement('article');
-        article.classList.add('product-list__item', 'tile', 'js-product');
-        article.setAttribute('data-id', item.id);
+  goods.forEach((item) => {
+    const article = document.createElement("article");
+    article.classList.add("product-list__item", "tile", "js-product");
+    article.setAttribute("data-id", item.id);
 
-        article.innerHTML = `
+    article.innerHTML = `
         <a href="${item.href}" class="tile__link">
             <span class="tile__top">
                 <span class="tile__badge tile__badge--${item.badge}">${item.badge}</span>
@@ -71,9 +71,9 @@ function showProducts(goods, filterBy){
                 <img src="${item.images[0].preview}" alt="${item.title}">
             </span>
             <span class="tile__title">${item.title}</span>
-            <span class="tile__sale-info sale">
-                <span class="sale__text">Акція діє до 01.04.2023</span>
-                <span class="sale__counter">24 дня 2 год 54 хв 05 сек</span>
+            <span class="tile__sale-info sale js-tile-sale">
+                <!--<span class="sale__text">Акція діє до 01.04.2023</span>-->
+                <!-- <span class="sale__counter">24 дня 2 год 54 хв 05 сек</span>-->
             </span>
             <span class="tile__info">
                 <span class="tile__price">
@@ -84,108 +84,120 @@ function showProducts(goods, filterBy){
             </span>
         </a>
     `;
-        productList.appendChild(article);
-    })
+    productList.appendChild(article);
+  });
 }
 
 function showDeleteButton(ids) {
-    let products = document.querySelectorAll('.js-product');
-    products.forEach(function (product) {
-        if (ids.includes(product.dataset.id)) {
-            let deleteButton = product.querySelector('.js-delete-item');
-            deleteButton.classList.remove('hidden');
-        }
-    })
+  let products = document.querySelectorAll(".js-product");
+  products.forEach(function (product) {
+    if (ids.includes(product.dataset.id)) {
+      let deleteButton = product.querySelector(".js-delete-item");
+      deleteButton.classList.remove("hidden");
+    }
+  });
 }
 
 function setCount(num) {
-    headerCount.innerText = num;
+  headerCount.innerText = num;
 }
 
 function setCountEvent(products) {
-    headerCount.addEventListener('click', () => {
-        let addedToCartProducts = getAddedProducts()
-        if(addedToCartProducts.length > 0) {
-            showCartProducts(addedToCartProducts, products);
-            showPopup(popupCart);
-        }
-    });
+  headerCount.addEventListener("click", () => {
+    let addedToCartProducts = getAddedProducts();
+    if (addedToCartProducts.length > 0) {
+      showCartProducts(addedToCartProducts, products);
+      showPopup(popupCart);
+    }
+  });
 }
 
 function getAddedProducts() {
-    return localStorage.getItem('cart')?.split(', ') || [];
+  return localStorage.getItem("cart")?.split(", ") || [];
 }
 
 function removeFromCart(parent, isPopup = false) {
-    let id = parent.dataset.id;
-    let addedToCartProducts = getAddedProducts();
-    let newProductsList = addedToCartProducts.filter((item) => item != id);
-    newProductsList.length > 0 ? localStorage.setItem('cart', newProductsList.join(', ')) : localStorage.removeItem('cart');
-    setCount(newProductsList.length);
-    if(!isPopup) {
-        let deleteButton = parent.querySelector('.js-delete-item');
-        let tileTitle = parent.querySelector('.tile__title').innerText;
-        deleteButton.classList.add('hidden');
-        showNotification(tileTitle, 'видалено');
-    } else {
-        let products = document.querySelectorAll('.js-product');
-        products.forEach(product => {
-            if(product.dataset.id === id) {
-                let deleteButton = product.querySelector('.js-delete-item');
-                deleteButton.classList.add('hidden');
-            }
-        })
-    }
+  let id = parent.dataset.id;
+  let addedToCartProducts = getAddedProducts();
+  let newProductsList = addedToCartProducts.filter((item) => item != id);
+  newProductsList.length > 0
+    ? localStorage.setItem("cart", newProductsList.join(", "))
+    : localStorage.removeItem("cart");
+  setCount(newProductsList.length);
+  if (!isPopup) {
+    let deleteButton = parent.querySelector(".js-delete-item");
+    let tileTitle = parent.querySelector(".tile__title").innerText;
+    deleteButton.classList.add("hidden");
+    showNotification(tileTitle, "видалено");
+  } else {
+    let products = document.querySelectorAll(".js-product");
+    products.forEach((product) => {
+      if (product.dataset.id === id) {
+        let deleteButton = product.querySelector(".js-delete-item");
+        deleteButton.classList.add("hidden");
+      }
+    });
+  }
 }
 
 function addToCart(button) {
-    let parent = button.closest('.product-list__item');
-    let deleteButton = parent.querySelector('.js-delete-item');
-    let id = parent.dataset.id;
-    let tileTitle = parent.querySelector('.tile__title').innerText;
-    let addedToCartProducts = getAddedProducts();
+  let parent = button.closest(".product-list__item");
+  let deleteButton = parent.querySelector(".js-delete-item");
+  let id = parent.dataset.id;
+  let tileTitle = parent.querySelector(".tile__title").innerText;
+  let addedToCartProducts = getAddedProducts();
 
-    deleteButton.classList.remove('hidden');
-    addedToCartProducts.push(id);
-    localStorage.setItem('cart', addedToCartProducts.join(', '));
-    setCount(addedToCartProducts.length);
-    showNotification(tileTitle, 'додано');
+  deleteButton.classList.remove("hidden");
+  addedToCartProducts.push(id);
+  localStorage.setItem("cart", addedToCartProducts.join(", "));
+  setCount(addedToCartProducts.length);
+  showNotification(tileTitle, "додано");
 }
 
 function showNotification(productName, text) {
-    notification.classList.add('notification--active');
-    notificationText.innerText = `Продукт ${productName} успішно ${text}!`
-    setTimeout(() => notification.classList.remove('notification--active'), 3000);
+  notification.classList.add("notification--active");
+  notificationText.innerText = `Продукт ${productName} успішно ${text}!`;
+  setTimeout(() => notification.classList.remove("notification--active"), 3000);
 }
 
 function showPopup(popup) {
-    let popupClose = popup.querySelector('.js-popup-close');
-    popup.classList.add('popup--active');
-    popupClose.addEventListener('click', () => hidePopup(popup));
+  let popupClose = popup.querySelector(".js-popup-close");
+  popup.classList.add("popup--active");
+  popupClose.addEventListener("click", () => hidePopup(popup));
 }
 function hidePopup(popup) {
-    popup.classList.remove('popup--active');
+  popup.classList.remove("popup--active");
 }
 
 function showCartProducts(productIds, goods) {
-    popupCartList.innerHTML = '';
-    goods.forEach(item => {
-        if(productIds.includes(String(item.id))) {
-            let filtered = productIds.filter(el => el === String(item.id));
-            let counter = filtered.length;
-            let itemList = document.createElement('li');
-            itemList.className = "popup-cart__list-item cart-item";
-            itemList.dataset.id = item.id;
-            itemList.innerHTML = `<span class="cart-item__img">
-                                    <img src="${item.images[0].preview}" alt="${item.title}">
+  popupCartList.innerHTML = "";
+  goods.forEach((item) => {
+    if (productIds.includes(String(item.id))) {
+      let filtered = productIds.filter((el) => el === String(item.id));
+      let counter = filtered.length;
+      let itemList = document.createElement("li");
+      itemList.className = "popup-cart__list-item cart-item";
+      itemList.dataset.id = item.id;
+      itemList.innerHTML = `<span class="cart-item__img">
+                                    <img src="${item.images[0].preview}" alt="${
+        item.title
+      }">
                                 </span>
                                 <span class="cart-item__info">
-                                    <a href="${item.href}" class="cart-item__link">
-                                        <span class="cart-item__title">${item.title}</span>
+                                    <a href="${
+                                      item.href
+                                    }" class="cart-item__link">
+                                        <span class="cart-item__title">${
+                                          item.title
+                                        }</span>
                                         <span class="cart-item__price">
                                             <span class="tile__count">${counter}</span>
-                                            <span class="tile__price">Вартість - ${item.price.current} ₴</span>
-                                            <span class="tile__total-price">Сума - ${item.price.current * counter} ₴</span>
+                                            <span class="tile__price">Вартість - ${
+                                              item.price.current
+                                            } ₴</span>
+                                            <span class="tile__total-price">Сума - ${
+                                              item.price.current * counter
+                                            } ₴</span>
                                         </span>
                                     </a>
                                 </span>
@@ -203,114 +215,183 @@ function showCartProducts(productIds, goods) {
                                         </defs>
                                     </svg>
                                 </span>`;
-            popupCartList.appendChild(itemList);
-        }
-    });
-    setPopupCartRemove();
+      popupCartList.appendChild(itemList);
+    }
+  });
+  setPopupCartRemove();
 }
 
 function setPopupCartRemove() {
-    let removeBtns = document.querySelectorAll('.js-cart-remove');
+  let removeBtns = document.querySelectorAll(".js-cart-remove");
 
-    removeBtns.forEach(btn => btn.addEventListener('click', function(){
-        let parent = btn.closest('.cart-item');
-        parent.classList.add('hidden');
-        removeFromCart(parent, true)
-    }))
+  removeBtns.forEach((btn) =>
+    btn.addEventListener("click", function () {
+      let parent = btn.closest(".cart-item");
+      parent.classList.add("hidden");
+      removeFromCart(parent, true);
+    })
+  );
 }
 
 function sortProducts(e, products) {
-    let value = e.target.value;
-    let sortedProducts = [...products]
+  let value = e.target.value;
+  let sortedProducts = [...products];
 
-    switch(value) {
-        case 'price':
-            sortedProducts = products.sort((a, b) => a.price.current > b.price.current ? 1 : -1);
-            break;
-        case 'alphabet':
-            sortedProducts = products.sort((a, b) => a.title > b.title ? 1 : -1);
-            break;
-    }
-    
-    showProducts(sortedProducts)
+  switch (value) {
+    case "price":
+      sortedProducts = products.sort((a, b) =>
+        a.price.current > b.price.current ? 1 : -1
+      );
+      break;
+    case "alphabet":
+      sortedProducts = products.sort((a, b) => (a.title > b.title ? 1 : -1));
+      break;
+  }
+
+  showProducts(sortedProducts);
 }
 
-function setSort(arr){
-    sortInputs.forEach(input => input.addEventListener('change', (e) => sortProducts(e, arr)))
+function setSort(arr) {
+  sortInputs.forEach((input) =>
+    input.addEventListener("change", (e) => sortProducts(e, arr))
+  );
 }
 
-function setFilter(arr){
-    filterSelect.addEventListener('change', e => getFilteredProducts(e, arr))
+function setFilter(arr) {
+  filterSelect.addEventListener("change", (e) => getFilteredProducts(e, arr));
 }
 
 function getFilteredProducts(e, products) {
-    let value = e.target.value;
-    let filteredProducts = null;
+  let value = e.target.value;
+  let filteredProducts = null;
 
-    if(value == 'all') {
-        setSearchParams('filter', '')
-        filteredProducts = [...products];
-    } else {
-        setSearchParams('filter', value)
-        filteredProducts = products.filter(item => item.tag_list.includes(value))
-    }
+  if (value == "all") {
+    setSearchParams("filter", "");
+    filteredProducts = [...products];
+  } else {
+    setSearchParams("filter", value);
+    filteredProducts = products.filter((item) => item.tag_list.includes(value));
+  }
 
-    showProducts(filteredProducts)
+  showProducts(filteredProducts);
 }
 
 function setSearchParams(key, value) {
-    let currentUrl = window.location;
-    let url = new URL(currentUrl);
-    let params = new URLSearchParams(url.search);
-    
-    if(value === '') {
-        params.delete(key);
-    } else {
-        params.set(key, value);
-    }
-    url.search = params.toString();
-    window.location.href = url.toString();
+  let currentUrl = window.location;
+  let url = new URL(currentUrl);
+  let params = new URLSearchParams(url.search);
+
+  if (value === "") {
+    params.delete(key);
+  } else {
+    params.set(key, value);
+  }
+  url.search = params.toString();
+  window.location.href = url.toString();
 }
 
 function getSearchParams(key) {
-    let currentUrl = window.location;
-    let url = new URL(currentUrl);
-    let params = new URLSearchParams(url.search);
-    let search = params.get(key);
+  let currentUrl = window.location;
+  let url = new URL(currentUrl);
+  let params = new URLSearchParams(url.search);
+  let search = params.get(key);
 
-    if(search) {
-        setCurrentOption(search);
-    }
-    
-    getGoods().then(result => {
-        showProducts(result, search);
-        setSort(result);
-        setFilter(result);
-        showDeleteButton(ids);
-        setBtnProductsEvent();
-        setCountEvent(result);
-    })
+  if (search) {
+    setCurrentOption(search);
+  }
+
+  getGoods().then((result) => {
+    showProducts(result, search);
+    setSort(result);
+    setFilter(result);
+    showDeleteButton(ids);
+    setBtnProductsEvent();
+    setCountEvent(result);
+    setTimer();
+    setInterval(countTime);
+    setTimeout(setInterval(closeBanner, 1000), 3000);
+  });
 }
 
-function setCurrentOption(val){
-    filterSelect.querySelector(`option[value=${val}]`).setAttribute('selected', 'selected')
+function setCurrentOption(val) {
+  filterSelect
+    .querySelector(`option[value=${val}]`)
+    .setAttribute("selected", "selected");
 }
 
 function setBtnProductsEvent() {
-    let deleteButtons = document.querySelectorAll('.js-delete-item');
-    let addToCartButtons = document.querySelectorAll('.js-add-to-cart-btn');
+  let deleteButtons = document.querySelectorAll(".js-delete-item");
+  let addToCartButtons = document.querySelectorAll(".js-add-to-cart-btn");
 
-    deleteButtons.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            removeFromCart(btn.closest('.product-list__item'));
-        })
+  deleteButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      removeFromCart(btn.closest(".product-list__item"));
     });
+  });
 
-    addToCartButtons.forEach((button) => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            addToCart(button);
-        })
+  addToCartButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      addToCart(button);
     });
+  });
+}
+
+function setTimer() {
+  const badges = document.querySelectorAll(".tile__badge");
+  const timers = document.querySelectorAll(".js-tile-sale");
+
+  for (let i = 0; i < badges.length; i++) {
+    if (badges[i].innerText === "sale") {
+      timers[i].innerHTML = `
+                 <span class="sale__text">Акція діє до 01.04.2023</span>
+                 <span class="sale__counter">24 дня 2 год 54 хв 05 сек</span>`;
+    }
+  }
+}
+
+function addZero(number) {
+  let result = "" + number;
+  if (result.length < 2) {
+    result = "0" + result;
+  }
+  return result;
+}
+
+function countTime() {
+  let date = new Date().getTime();
+  let endDate = new Date(2023, 3, 1).getTime();
+  const timers = document.querySelectorAll(".sale__counter");
+
+  let remainingTime = endDate - date;
+  let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+  let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+  let hours = Math.floor(
+    (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  let days = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
+
+  timers.forEach((timer) => {
+    remainingTime <= 0
+      ? (timer.innerHTML = `Вибачте! Акція скінчилася`)
+      : (timer.innerHTML = `${addZero(days)} дні ${addZero(
+          hours
+        )} год ${addZero(minutes)} хв ${addZero(seconds)} сек`);
+  });
+}
+
+function closeBanner() {
+  let currentDate = new Date().getTime();
+  const btnCloseBanner = document.querySelector(".js-sale-banner-close");
+
+  currentDate > localStorage.getItem("bannerClosed") &&
+    banner.classList.remove("sale-banner__hide");
+
+  const sevenDays = 604800000;
+  btnCloseBanner.addEventListener("click", () => {
+    localStorage.setItem("bannerClosed", currentDate + sevenDays);
+
+    banner.classList.add("sale-banner__hide");
+  });
 }
